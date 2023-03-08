@@ -1,0 +1,61 @@
+lemma: 
+
++-suc : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
++-identityʳ : ∀ (m : ℕ) → m + zero ≡ m
++-comm : ∀ (m n : ℕ) → m + n ≡ n + m
+
+*-distrib-+ : ∀ (m n p : ℕ) → (m + n) * p ≡ m * p + n * p
+*-assoc : ∀ (m n p : ℕ) → (m * n) * p ≡ m * (n * p)
+*suc` : ∀ (p x : ℕ) → p * suc x ≡ p + p * x
+*-comm : ∀ (m n : ℕ) → m * n ≡ n * m
+
+
+0∸n≡0 : ∀ (n : ℕ) → zero ∸ n ≡ zero
+∸-+-assoc : ∀ (m n p : ℕ) →  m ∸ n ∸ p ≡ m ∸ (n + p)
+
+^-distribˡ-+-* : ∀ (m n p : ℕ) → m ^ (n + p) ≡ (m ^ n) * (m ^ p)
+^-distribʳ-* : ∀ (m n p : ℕ ) → (m * n) ^ p ≡ (m ^ p) * (n ^ p)  
+===============================
+
+Definitions: 
+
+_∸_ : ℕ → ℕ → ℕ
+m     ∸ zero   =  m
+zero  ∸ suc n  =  zero
+suc m ∸ suc n  =  m ∸ n
+
+_^_ : ℕ → ℕ → ℕ 
+m ^ zero  = 1
+m ^ (suc n) = m * (m ^ n)
+
+_*_ : ℕ → ℕ → ℕ
+zero    * n  =  zero
+(suc m) * n  =  n + (m * n)
+
+
+
+=============================
+data Bin : Set where
+  ⟨⟩ : Bin
+  _O : Bin → Bin
+  _I : Bin → Bin
+  
+inc : Bin → Bin 
+inc (b O) = b I
+inc (b I) = (inc b) O
+inc ⟨⟩ = ⟨⟩ I
+
+to : ℕ → Bin 
+to zero = ⟨⟩ O
+to (suc nat) = inc (to nat)
+
+from : Bin → ℕ
+from (b O) = (from b) * 2
+from (b I) = (from b) * 2 + 1
+from ⟨⟩ = 0
+
++1≡suc : ∀ (m : ℕ) → m + 1 ≡ suc m
++1≡suc zero = refl
++1≡suc (suc m) rewrite +1≡suc m = refl
+
+inc-proof : ∀ (b : Bin) → from (inc b) ≡ suc (from b)
